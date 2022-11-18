@@ -20,6 +20,4 @@ int main()
 		}
 		inputRobFile.close();
 	}
-	//testing..............
-	//testing again...
 }
