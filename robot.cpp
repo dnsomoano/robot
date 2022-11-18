@@ -9,6 +9,7 @@ using namespace std;
 
 int main()
 {
+	cout << "Hello, this is Cameron!" << endl;
 	int sprockets = 0;
     ifstream inputRobFile("example-input.txt");
 	if (inputRobFile)
