@@ -41,15 +41,6 @@ int main()
 					s >> rb.partNum;
 				}
 				robotsFromFile.push_back(rb);
-				//if (isdigit(static_cast<unsigned char>(line[0])))
-				//	numOfRobots = stoi(line);
-				//for (int i=0; i < 1; i++)
-				//{
-				//	if (line[0] == 'o')
-				//		omnidroid->set_name(line);
-				//	else if (line[0] == 'r')
-				//		robotamton->set_name(line);
-				//}
 			}
 			cout << line << endl;
 		}
@@ -63,5 +54,4 @@ int main()
 		totalLayers = stoi(robotsFromFile[2].partNum);
 	}
 }
-
-//testing
+//testing git commands
