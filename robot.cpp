@@ -4,25 +4,30 @@
 #include <iostream>
 #include <string>
 #include <string_view>
+#include <algorithm>
 #include <fstream>
 #include <sstream>
-#include <vector>
+#include <unordered_map>
 #include <map>
+#include <vector>
 #include <limits>
+#include <ctype.h>
 #include "Part.h"
 
 using namespace std;
 
 int main()
 {
-	vector<int> partsLookup;
-	vector<RobotTree> robots;
-	vector<pair<string, string>> robotsFromFile;
-	int numOfRobots = 0;
-	int totalParts = 0, totalLayers = 0;
+	bool isOmni = false;
+	vector<int> sprockets;
+	vector<int> use;
+	unordered_map<int, vector<int>> req;
+	vector<pair<string, string>> rfStrToks;
+	int numOfRobots = 0, totalParts = 0, totalLayers = 0;
 	Part* omnidroid = new Part();
 	Part* robotamton = new Part();
-    ifstream inputRobFile("small-omni-input.txt");
+	// * Read input file.
+    ifstream inputRobFile("example-input.txt");
 	if (inputRobFile)
 	{
 		string line;
@@ -37,40 +42,106 @@ int main()
 				{
 					s >> p.second;
 				}
-				robotsFromFile.push_back(p);
+				rfStrToks.push_back(p);
 			}
 			cout << line << endl;
 		}
+		//while (getline(inputRobFile, line))
+		//getline(inputRobFile, line, '\n');
+		//numOfRobots = stoi(line);
+		//getline(inputRobFile, line, '\n');
+		//getline(inputRobFile, line, '\n');
+		//if (line.compare("omnidroid") == 0)
+		//{
+		//	isOmni = true;
+		//	getline(inputRobFile, line, ' ');
+		//	totalParts = stoi(line);
+		//	getline(inputRobFile, line, ' ');
+		//	totalLayers = stoi(line);
+		//	getline(inputRobFile, line, '\n');
+		//	cout << line << endl;
+		//	while (getline(inputRobFile, line, '\n'))
+		//	{
+		//			// * Omnidroid
+		//		//pair<string, string> p;
+		//		//stringstream s(line);
+		//		//getline(s, p.first, ' ');
+		//		//if (s.peek() != EOF)
+		//		//{
+		//		//	s >> p.second;
+		//		//}
+		//		//robotsFromFile.push_back(p);
+		//	}
+		//	cout << line << endl;
 		inputRobFile.close();
 	}
-
-	int ifSize = robotsFromFile.size();
-
-	numOfRobots = stoi(robotsFromFile[0].first); //save number of robots from top of file
-
-	for (int i = 0; i < numOfRobots; i++)
+	int ifSize = rfStrToks.size();
+	numOfRobots = stoi(rfStrToks[0].first);
+	totalParts = stoi(rfStrToks[2].first);
+	totalLayers = stoi(rfStrToks[2].second);
+	int totalBldSteps = totalLayers + 3;
+	for (int j = 3; j < totalBldSteps || isalpha(rfStrToks[j].first[0]); j++)
 	{
-		RobotTree rbt;
-		totalParts = stoi(robotsFromFile[2].first);
-		cout << totalParts << endl;
-		totalLayers = stoi(robotsFromFile[2].second);
-		cout << totalLayers << endl;
-		int l = 0;
-		for (int k = totalLayers + 3; k < ifSize && l < totalParts; k++, l++)
+		int iVal = stoi(rfStrToks[j].first);
+		int iPlusOneVal = stoi(rfStrToks[j+1].first);
+
+		int jVal = stoi(rfStrToks[j].second);
+		int jPlusOneVal = 0;
+		if ((j + 1) < totalBldSteps)
 		{
-			partsLookup.push_back(stoi(robotsFromFile[k].first));
+			jPlusOneVal = stoi(rfStrToks[j + 1].second);
 		}
-		rbt.insert(robotsFromFile[1].first, 6);
-		for (int j = 3; j < totalLayers + 3 || isalpha(robotsFromFile[j].first[0]); j++)
+
+		bool isIValsEq = iVal == iPlusOneVal;
+		bool isJValsEq = jVal == jPlusOneVal;
+		bool isIValIntermPart = find(use.begin(), use.end(), iVal) != use.end();
+		bool isJValIntermPart = find(use.begin(), use.end(), jVal) != use.end();
+		// * If i int is eq to i + 1 int and j is eq to j + 1 int.
+		// * Add i and i + 1 and entries into req, plus add an entry each for j and j + 1 to use(interm array).
+		if (isIValsEq && isJValsEq)
 		{
-			// TODO check for empty string, do not overflow to parts list.
-			rbt.insert(robotsFromFile[j].first, partsLookup[stoi(robotsFromFile[j].first)]);
-			//cout << robotsFromFile[j].first << endl;
+			if (!isIValIntermPart)
+			{
+				// TODO change to power of 2 instead of 4.
+				for (int b = 0; b < 4; b++)
+				{
+					req[jVal].push_back(iVal);
+				}
+				use.push_back(jVal);
+			}
+			else
+			{
+				// TODO change to power of 2 instead of 4.
+				for (int b = 0; b < 2; b++)
+					req[jVal].push_back(iVal);
+			}
+			j = j + 1;
 		}
-		robots.push_back(rbt);
-		cout << "Added one robot" << endl;
-		//omnidroid->set_name(robotsFromFile[1].first);
-		//omnidroid->set_sprockets(6);
+		// * If i int is NOT eq to i + 1 int and j is eq to j + 1 int.
+		// * Add i and i + 1 and entries into req, and add ONLY one entry for j and j + 1 to use(interm array).
+		else if (!isIValsEq && isJValsEq)
+		{
+			req[jVal].push_back(iVal);
+			req[jVal].push_back(iPlusOneVal);
+			use.push_back(jVal);
+			j = j + 1;
+		}
+		// * If i int is NOT eq to i + 1 int and j is NOT eq to j + 1 int.
+		// * Add i and i + 1 as SEPARATE entries into req, plus add an entry each for j, corresp with i, and j + 1, corresp with i + 1, to use(interm array).
+		else if (!isIValsEq && !isJValsEq)
+		{
+			req[jVal].push_back(iVal);
+			if (!isJValIntermPart)
+				use.push_back(jVal);
+		}
 	}
+	// * Generating sprockets lookup for parts.
+	int l = 0;
+	for (int k = totalLayers + 3; k < ifSize && l < totalParts; k++, l++)
+	{
+		sprockets.push_back(stoi(rfStrToks[k].first));
+	}
+	cout << "Added one robot" << endl;
+	// TODO must iterate over map using memoized algorithm to generate total sprockets for each robot.
 }
 //testing git commands

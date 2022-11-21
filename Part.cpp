@@ -5,13 +5,15 @@ Part::Part()
 	name = "";
 	sprockets = 0;
 }
-Part::Part(int x)
+Part::Part(int ptIdx, int x)
 {
+    this->set_part_index(ptIdx);
     this->set_sprockets(x);
 }
-Part::Part(string n, int x)
+Part::Part(string n, int ptIdx, int x)
 {
     this->set_name(n);
+    this->set_part_index(ptIdx);
     this->set_sprockets(x);
 }
 string Part::get_name()
@@ -21,6 +23,14 @@ string Part::get_name()
 void Part::set_name(string n)
 {
 	name = n;
+}
+int Part::get_part_index()
+{
+    return partIndex;
+}
+void Part::set_part_index(int i)
+{
+    partIndex = i;
 }
 int Part::get_sprockets()
 {
@@ -33,25 +43,25 @@ void Part::set_sprockets(int i)
 
 //Recursive insertion function
 //Inserts a BSTNode with x below this node
-void Part::insert(string name, int sp)
+void Part::insert(string name, int partIdx, int sp)
 {
-  if (sp < get_sprockets())
+  if (partIdx > get_part_index())
   {
     if (left != nullptr)
-      left->insert(name, sp);
+      left->insert(name, partIdx, sp);
     else
     {
-      left = new Part(name, sp);
+      left = new Part(name, partIdx, sp);
       left->parent = this;
     }
   }
   else
   {
     if (right != nullptr)
-      right->insert(name, sp);
+      right->insert(name, partIdx, sp);
     else
     {
-      right = new Part(name, sp);
+      right = new Part(name, partIdx, sp);
       right->parent = this;
     }
   }
@@ -106,12 +116,12 @@ void Part::insert(string name, int sp)
 
 //Insert an element into the BST
 //Works recursively unless BST is empty
-void RobotTree::insert(string name, int x)
+void RobotTree::insert(string name, int ptIdx, int x)
 {
   if (root != nullptr)
-    root->insert(name, x);
+    root->insert(name, ptIdx, x);
   else
-    root = new Part(name, x);
+    root = new Part(name, ptIdx, x);
   
   size++;
 }
