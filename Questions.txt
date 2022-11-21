@@ -58,6 +58,11 @@ combining together some number of sprockets in the correct configuration.
     number of previous stages used to construct a particular part. Your answer should include
     how the solution to the subproblems are combined together to solve the original problem.
     
+The robotomaton construction problem gives us the number of sprockets, s, and the previous arrays, p, indicating the number of stages used to construct part t.
+
+
+
+
 
 /*********************************************************************************************************/
 
@@ -70,22 +75,36 @@ combining together some number of sprockets in the correct configuration.
 5.  What data structure would you use to recognize repeated problems for each problem (two
     answers)? You should describe both the abstract data structures, as well as their implementations.
 
+omnidroid:
+
+
+robotomaton:
+
+
 /*********************************************************************************************************/
 
 6.  Give pseudocode for a memoized dynamic programming algorithm to calculate the sprockets
     needed to construct an omnidroid.
 
+
+
 /*********************************************************************************************************/
 
 7.  What is the worst-case time complexity of your memoized algorithm for the omnidroid construction problem?
+
+
 
 /*********************************************************************************************************/
 
 8.  Give pseudocode for a memoized dynamic programming algorithm to calculate the sprockets
     needed to construct a robotomaton.
 
+
+
 /*********************************************************************************************************/
 
 9.  Give pseudocode for an iterative algorithm to calculate the sprockets needed to construct a
     robotomaton. This algorithm does not need to have a reduced space complexity, but it should
     have asymptotically optimal time complexity.
+
+
