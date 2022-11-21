@@ -16,14 +16,15 @@
 
 using namespace std;
 
+unordered_map<int, vector<int>> req;
+
 int main()
 {
 	bool isOmni = false;
 	vector<int> sprockets;
 	vector<int> use;
-	unordered_map<int, vector<int>> req;
 	vector<pair<string, string>> rfStrToks;
-	int numOfRobots = 0, totalParts = 0, totalLayers = 0;
+	int numOfRobots = 0, totalParts = 0, totalLayers = 0, totalSprockets = 0;
 	Part* omnidroid = new Part();
 	Part* robotamton = new Part();
 	// * Read input file.
@@ -141,8 +142,39 @@ int main()
 	{
 		sprockets.push_back(stoi(rfStrToks[k].first));
 	}
+	auto iterMap = ++req.begin();
+	cout << typeid(iterMap).name() << endl;
 	cout << "Added one robot" << endl;
 	// TODO must iterate over map using memoized algorithm to generate total sprockets for each robot.
+}
+
+int totalSprocketWrapper(unordered_map<int, std::vector<int>> map, vector<int> sprockets, int totalParts)
+{
+	// * Initialize array with sentinel value
+	vector<int> sprocketTally;
+	for (int i = 0; i < totalParts; i++)
+	{
+		sprocketTally.push_back(-1);
+	}
+	return memoizedSprockets(map.begin(), 0, sprockets, totalParts, sprocketTally);
+}
+
+template<typename T>
+int memoizedSprockets(T iterV, int i, vector<int> sprockets, int totalPts, vector<int> sumArr)
+{
+	if (sumArr[totalPts] != -1)
+	{
+		return sumArr[totalPts];
+	}
+	// * When memoized has iterated through all columns in row, increment to next row.
+	else if(iterV.second[i] == iterV.second.Size())
+		sumArr[totalPts] = sprockets[i] + memoizedSprockets(++map.begin().second[i], i+1, sprockets, totalPts - 1, sumArr);
+	// * Iterate through next cell in row.
+	else
+	{
+		sumArr[totalPts] = sprockets[totalPts] + memoizedSprockets(map.begin().second[i], i, sprockets, totalPts - 1, sumArr);
+	}
+	return sumArr[totalPts];
 }
 
 //testing

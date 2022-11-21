@@ -1,3 +1,7 @@
 ﻿  robot.cpp
   The contents of <string_view> are available only with C++17 or later.
-  robot.vcxproj -> C:\Users\Halberd\source\repos\robot\Debug\robot.exe
+C:\Users\Halberd\source\repos\robot\robot.cpp(159,9): error C3861: 'memoizedSprockets': identifier not found
+C:\Users\Halberd\source\repos\robot\robot.cpp(171,57): error C2955: 'std::map': use of class template requires template argument list
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\map(73): message : see declaration of 'std::map'
+C:\Users\Halberd\source\repos\robot\robot.cpp(175,62): error C2955: 'std::map': use of class template requires template argument list
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\map(73): message : see declaration of 'std::map'
