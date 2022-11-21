@@ -22,7 +22,7 @@ int main()
 	int totalParts = 0, totalLayers = 0;
 	Part* omnidroid = new Part();
 	Part* robotamton = new Part();
-    ifstream inputRobFile("example-input.txt");
+    ifstream inputRobFile("small-omni-input.txt");
 	if (inputRobFile)
 	{
 		string line;
@@ -43,13 +43,18 @@ int main()
 		}
 		inputRobFile.close();
 	}
+
 	int ifSize = robotsFromFile.size();
-	numOfRobots = stoi(robotsFromFile[0].first);
+
+	numOfRobots = stoi(robotsFromFile[0].first); //save number of robots from top of file
+
 	for (int i = 0; i < numOfRobots; i++)
 	{
 		RobotTree rbt;
 		totalParts = stoi(robotsFromFile[2].first);
+		cout << totalParts << endl;
 		totalLayers = stoi(robotsFromFile[2].second);
+		cout << totalLayers << endl;
 		int l = 0;
 		for (int k = totalLayers + 3; k < ifSize && l < totalParts; k++, l++)
 		{
@@ -60,6 +65,7 @@ int main()
 		{
 			// TODO check for empty string, do not overflow to parts list.
 			rbt.insert(robotsFromFile[j].first, partsLookup[stoi(robotsFromFile[j].first)]);
+			//cout << robotsFromFile[j].first << endl;
 		}
 		robots.push_back(rbt);
 		cout << "Added one robot" << endl;
