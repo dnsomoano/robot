@@ -16,6 +16,9 @@
 
 using namespace std;
 
+int rec_omnidroid(vector<int>& sprockets, unordered_map<int, vector<int> >& prev, unordered_map<int, int>& step_map, int current);
+// int rec_robotomaton();
+
 int main()
 {
 	bool isOmni = false;
@@ -44,7 +47,7 @@ int main()
 				}
 				rfStrToks.push_back(p);
 			}
-			cout << line << endl;
+			//cout << line << endl;
 		}
 		//while (getline(inputRobFile, line))
 		//getline(inputRobFile, line, '\n');
@@ -78,7 +81,9 @@ int main()
 	int ifSize = rfStrToks.size();
 	numOfRobots = stoi(rfStrToks[0].first);
 	totalParts = stoi(rfStrToks[2].first);
+	//cout << totalParts << endl;
 	totalLayers = stoi(rfStrToks[2].second);
+	//cout << totalLayers << endl;
 	int totalBldSteps = totalLayers + 3;
 	for (int j = 3; j < totalBldSteps || isalpha(rfStrToks[j].first[0]); j++)
 	{
@@ -142,6 +147,6 @@ int main()
 		sprockets.push_back(stoi(rfStrToks[k].first));
 	}
 	cout << "Added one robot" << endl;
+
 	// TODO must iterate over map using memoized algorithm to generate total sprockets for each robot.
-}
-//testing git commands
+}//end main
