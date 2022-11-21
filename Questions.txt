@@ -1,0 +1,94 @@
+//questions and answers
+
+
+1.  How you can break down a problem instance of the omnidroid construction problem into one
+    or more smaller instances? You may use sprocket[t] to represent the number of sprockets used
+    for part t, and you may use req[t] and use[t] to represent the collection of all parts required
+    to build part t and all parts that part t is used to build, respectively. Your answer should
+    include how the solution to the original problem is constructed from the subproblems.
+
+The omnidroid problem takes in an input of the number of parts, the number of sprockets required to build those parts,
+and the dependences of those parts. The goal is to calculate the total number of sprockets required to build the 
+completed omnidroid robot.
+
+There are three categories that can describe each part (different from basic or intermediate). 
+Case 1. The part can represent the fully constructed omnidroid: (ID n - 1).
+        The value of sprockets[t] for part t is not empty.
+        This part will also have some value of req[t], describing all parts required to build part t, the omnidroid.
+        This part will also have no values for use[t] as this is the final construted part and is not used
+        to build anything else.
+
+Case 2. The part represents a basic part, being made of no intermediate parts and only of some number of sprockets.
+        The value of sprockets[t] for part t is not empty.
+        The value of req[t] is empty.
+        There will be some value for use[t].
+
+Case 3. This part represents all other parts of construction that are intermediate parts but are not the final omnidroid.
+        The value of sprockets[t] for part t is not empty.
+        The value of req[t] has some value or multiple values, needing some number of parts to construct case 3's part.
+        The value of use[t] has some value as some other part is dependent on it.
+
+For each instance, we need to check the values for sprockets[t], req[t], and use[t]. If we are in case 1, that means use[t] (t = (ID n - 1))
+is empty and the part is not used to build anything else. For each value stored in req[t] of the previous subproblem we will check the values of req[t] and use[t].
+The part will now either be a case 2 or case 3. If it is a case 2, for each value stored in req[t] of the previous subproblem we will check the values of req[t] and use[t].
+This will repeat until the subproblem becomes a case 3 in which there are no values stored in req[t] for that part. We now can check the value stored
+in sprockets[t] and add that value to the total sprocket count. We go up to the previous subproblem and check the value stored in sprockets[t] and add
+the value to the total sprocket count. This will be repeated for every subproblem until we get to case 1 where use[t] is empty. We check the value stored
+in sprockets[t] and add the value to the total sprocket count. If use[t] is empty, that means we fully traversed all dependencies and the total 
+number of sprockets to construct the omnidroid is calculated.
+
+//need to make sprocketsUpdate[t] to store value of calculated sprockets. This will change when we traverse so if we hit repeat it can lookup value.
+//STILL INCOMPLETE. Should be reworked so more coherent 
+
+
+
+
+/*********************************************************************************************************/
+
+2.  What is the base cases of the omnidroid construction problem?
+
+The base case for omnidroids is when the part, t, is not dependent on any other parts to build it.
+In terms of question 1, there are no req[t] for part t, meaning the part will be a basic part, based solely on 
+combining together some number of sprockets in the correct configuration.
+
+
+
+/*********************************************************************************************************/
+
+3.  How you can break down a problem instance of robotomaton construction problem into one
+    or more smaller instances? You should assume that you are given sprocket and previous
+    arrays that indicate the number of sprockets required for each stage of construction and the
+    number of previous stages used to construct a particular part. Your answer should include
+    how the solution to the subproblems are combined together to solve the original problem.
+    
+
+/*********************************************************************************************************/
+
+4.  What are the base cases of the robotomaton construction problem?
+
+
+
+/*********************************************************************************************************/
+
+5.  What data structure would you use to recognize repeated problems for each problem (two
+    answers)? You should describe both the abstract data structures, as well as their implementations.
+
+/*********************************************************************************************************/
+
+6.  Give pseudocode for a memoized dynamic programming algorithm to calculate the sprockets
+    needed to construct an omnidroid.
+
+/*********************************************************************************************************/
+
+7.  What is the worst-case time complexity of your memoized algorithm for the omnidroid construction problem?
+
+/*********************************************************************************************************/
+
+8.  Give pseudocode for a memoized dynamic programming algorithm to calculate the sprockets
+    needed to construct a robotomaton.
+
+/*********************************************************************************************************/
+
+9.  Give pseudocode for an iterative algorithm to calculate the sprockets needed to construct a
+    robotomaton. This algorithm does not need to have a reduced space complexity, but it should
+    have asymptotically optimal time complexity.
