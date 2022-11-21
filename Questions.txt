@@ -12,7 +12,7 @@ and the dependences of those parts. The goal is to calculate the total number of
 completed omnidroid robot.
 
 There are three categories that can describe each part (different from basic or intermediate). 
-Case 1. The part can represent the fully constructed omnidroid: (ID n - 1).
+Case 1. The part can represent the fully constructed omnidroid: t = (ID n - 1).
         The value of sprockets[t] for part t is not empty.
         This part will also have some value of req[t], describing all parts required to build part t, the omnidroid.
         This part will also have no values for use[t] as this is the final construted part and is not used
@@ -29,18 +29,15 @@ Case 3. This part represents all other parts of construction that are intermedia
         The value of use[t] has some value as some other part is dependent on it.
 
 For each instance, we need to check the values for sprockets[t], req[t], and use[t]. If we are in case 1, that means use[t] (t = (ID n - 1))
-is empty and the part is not used to build anything else. For each value stored in req[t] of the previous subproblem we will check the values of req[t] and use[t].
-The part will now either be a case 2 or case 3. If it is a case 2, for each value stored in req[t] of the previous subproblem we will check the values of req[t] and use[t].
-This will repeat until the subproblem becomes a case 3 in which there are no values stored in req[t] for that part. We now can check the value stored
-in sprockets[t] and add that value to the total sprocket count. We go up to the previous subproblem and check the value stored in sprockets[t] and add
-the value to the total sprocket count. This will be repeated for every subproblem until we get to case 1 where use[t] is empty. We check the value stored
-in sprockets[t] and add the value to the total sprocket count. If use[t] is empty, that means we fully traversed all dependencies and the total 
-number of sprockets to construct the omnidroid is calculated.
-
-//need to make sprocketsUpdate[t] to store value of calculated sprockets. This will change when we traverse so if we hit repeat it can lookup value.
-//STILL INCOMPLETE. Should be reworked so more coherent 
-
-
+is empty and the part is not used to build anything else. For each value stored in req[t] of the previous subproblem we will check the values of req[t] for each subsequent subproblem.
+The part will now either be a case 2 or case 3. If it is a case 3, for each value stored in req[t] of the previous subproblem we will check the values of req[t] for each subsequent subproblem.
+This will repeat until the subproblem becomes a case 2, in which there are no values stored in req[t] for that part. This means that part t is a basic part and requries no other parts
+are requried to build it besides the stored sprockets[t]. We now can check the value stored in sprockets[t] and add that value to the total sprocket count. 
+We go up to the previous subproblem and check the value stored in sprockets[t] and add the value to the total sprocket count.
+This will be repeated for every subproblem until we get to case 1 where use[t] is empty. We check the value stored
+in sprockets[t] and add the value to the total sprocket count when use[t] is empty. If use[t] is empty, that means we fully traversed all dependencies and the total 
+number of sprockets to construct the omnidroid is calculated. By traversing each part's req[t] until req[t] is empty, then traveling back on the path while adding
+sprockets[t] for each part to the total sprocket count, we can solbe the original problem from multiple subproblems.
 
 
 /*********************************************************************************************************/
