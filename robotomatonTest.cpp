@@ -8,6 +8,7 @@ using namespace std;
 
 int main(){
 
+    cout<< "test";
     
     //  used for calculating total sprockets
     int calcSprockets[] = {-1, -1, -1, -1};
@@ -30,8 +31,9 @@ int main(){
                 j--;
             }//end innerwhile
         }//end else
+        i++;
     }//end while
-
+    cout<< "test";
     cout<< "" <<calcSprockets[n-1];
     return 0;
 
