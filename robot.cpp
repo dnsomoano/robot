@@ -147,6 +147,55 @@ int main()
 		sprockets.push_back(stoi(rfStrToks[k].first));
 	}
 	cout << "Added one robot" << endl;
+	unordered_map<int, int> map_step;
+
 
 	// TODO must iterate over map using memoized algorithm to generate total sprockets for each robot.
+	int sprock_total = rec_omnidroid(sprockets, req, map_step, sprockets.size() - 1);
+	cout << "Sprocket Total: " << sprock_total << endl;
+
+	//Map printing in reverse???
+	// 7: 112236
+	// 6: 45
+	// 2: 0000
+	// 1: 0000
+	/* unordered_map<int, vector<int>>::iterator itr;
+	for(itr = req.begin(); itr != req.end(); itr++){
+		cout << itr->first << ": ";
+		for(auto c : itr->second){
+			cout << c;
+		}
+		cout << '\n';
+	} */
+
+	return 0; 
 }//end main
+
+//Tried Implementing Recursive Omni, incorrect output
+int rec_omnidroid(vector<int>& sprockets, unordered_map<int, vector<int> >& prev, unordered_map<int, int>& step_map, int current){
+
+	unordered_map<int, vector<int> >::iterator prevStepExists = prev.find(current);
+
+	if(current == 0){
+		return 0;
+	}
+
+    if(prevStepExists == prev.end()){
+        step_map[current] = sprockets[current];
+        return step_map[current];
+    }
+
+    for (int prevStep: prevStepExists->second){
+
+        unordered_map<int, int>::iterator stepExists = step_map.find(prevStep);
+        if (stepExists != step_map.end()){
+            step_map[current] += step_map[prevStep];
+        }
+        else{
+            step_map[current] += rec_omnidroid(sprockets, prev, step_map, prevStep);
+        }
+    }
+
+    return step_map[current] += sprockets[current];
+
+}//end rec_omnidroid
