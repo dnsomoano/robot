@@ -139,10 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Omnidroid.cpp" />
     <ClCompile Include="Part.cpp" />
     <ClCompile Include="robot.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Omnidroid.h" />
     <ClInclude Include="Part.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
