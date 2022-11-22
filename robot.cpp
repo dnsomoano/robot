@@ -16,19 +16,23 @@
 
 using namespace std;
 
-unordered_map<int, vector<int>> req;
+int naiveRb(vector<int> partsList, vector<int> sprockets, int totalPts);
+int memoizedSprockets(vector<int> listOfPartsById, vector<int> sprockets, vector<int>& sumArr, int totalPts);
+int totalSprocketWrapper(vector<int> listOfPartsById, vector<int> sprockets, int totalParts);
 
 int main()
 {
+	vector<int> listOfPartsById;
 	bool isOmni = false;
 	vector<int> sprockets;
 	vector<int> use;
+	unordered_map<int, vector<int>> req;
 	vector<pair<string, string>> rfStrToks;
-	int numOfRobots = 0, totalParts = 0, totalLayers = 0, totalSprockets = 0;
+	int numOfRobots = 0, totalParts = 0, totalLayers = 0;
 	Part* omnidroid = new Part();
 	Part* robotamton = new Part();
 	// * Read input file.
-    ifstream inputRobFile("example-input.txt");
+    ifstream inputRobFile("small-omni-input.txt");
 	if (inputRobFile)
 	{
 		string line;
@@ -103,8 +107,21 @@ int main()
 		{
 			if (!isIValIntermPart)
 			{
+				int jUp = j - 1;
+				int jCol = j + 2;
+				int numOfConsec = 2;
+				while (stoi(rfStrToks[jUp].first) == iVal)
+				{
+					numOfConsec++;
+					jUp--;
+				}
+				while (stoi(rfStrToks[jCol].first) == iVal)
+				{
+					numOfConsec++;
+					jCol++;
+				}
 				// TODO change to power of 2 instead of 4.
-				for (int b = 0; b < 4; b++)
+				for (int b = 0; b < numOfConsec; b++)
 				{
 					req[jVal].push_back(iVal);
 				}
@@ -142,39 +159,68 @@ int main()
 	{
 		sprockets.push_back(stoi(rfStrToks[k].first));
 	}
+	for (int i = 0; i < totalParts; i++)
+	{
+		listOfPartsById.push_back(0);
+	}
+	unordered_map<int, vector<int>>::iterator itr;
+    for(itr = req.begin(); itr != req.end(); itr++){
+        //cout << itr->first << ": ";
+		int sum = 0;
+        for(auto v : itr->second){
+			listOfPartsById[v] = listOfPartsById[v] + 1;
+        }
+        cout << '\n';
+    }
+	listOfPartsById[totalParts - 1] = 1;
+	vector<int> totalSprockets;
+	//totalSprockets = totalSprocketWrapper(listOfPartsById, sprockets, totalParts);
+	//int sprTot = naiveRb(listOfPartsById, sprockets, totalParts - 1);
+	int sprTot = totalSprocketWrapper(listOfPartsById, sprockets, totalParts - 1);
 	auto iterMap = ++req.begin();
 	cout << typeid(iterMap).name() << endl;
 	cout << "Added one robot" << endl;
 	// TODO must iterate over map using memoized algorithm to generate total sprockets for each robot.
 }
 
-int totalSprocketWrapper(unordered_map<int, std::vector<int>> map, vector<int> sprockets, int totalParts)
+int naiveRb(vector<int> partsList, vector<int> sprockets, int totalPts)
+{
+	if (totalPts < 0)
+	{
+		return 0;
+	}
+	else
+		return sprockets[totalPts] * partsList[totalPts] + naiveRb(partsList, sprockets, totalPts - 1);
+}
+
+int totalSprocketWrapper(std::vector<int> listOfPartsById, vector<int> sprockets, int totalParts)
 {
 	// * Initialize array with sentinel value
 	vector<int> sprocketTally;
-	for (int i = 0; i < totalParts; i++)
+	for (int i = 0; i < totalParts + 1; i++)
 	{
 		sprocketTally.push_back(-1);
 	}
-	return memoizedSprockets(map.begin(), 0, sprockets, totalParts, sprocketTally);
+	return memoizedSprockets(listOfPartsById, sprockets, sprocketTally, totalParts);
 }
 
-template<typename T>
-int memoizedSprockets(T iterV, int i, vector<int> sprockets, int totalPts, vector<int> sumArr)
+int memoizedSprockets(vector<int> listOfPartsById, vector<int> sprockets, vector<int>& sumArr, int totalPts)
 {
-	if (sumArr[totalPts] != -1)
+	if (totalPts < 0)
 	{
-		return sumArr[totalPts];
+		return 0;
 	}
-	// * When memoized has iterated through all columns in row, increment to next row.
-	else if(iterV.second[i] == iterV.second.Size())
-		sumArr[totalPts] = sprockets[i] + memoizedSprockets(++map.begin().second[i], i+1, sprockets, totalPts - 1, sumArr);
-	// * Iterate through next cell in row.
-	else
+	if (sumArr[totalPts] == -1)
 	{
-		sumArr[totalPts] = sprockets[totalPts] + memoizedSprockets(map.begin().second[i], i, sprockets, totalPts - 1, sumArr);
+		if (totalPts < 0)
+		{
+			return sumArr[totalPts];
+		}
+		else
+		{
+			sumArr[totalPts] = sprockets[totalPts] * listOfPartsById[totalPts] + (memoizedSprockets(listOfPartsById, sprockets, sumArr, totalPts - 1));
+		}
 	}
 	return sumArr[totalPts];
 }
-
 //testing
