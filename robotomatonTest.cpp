@@ -4,16 +4,14 @@
 using namespace std;
 
 
-
-
 int main(){
 
     cout<< "test\n";
     
     //  used for calculating total sprockets
-    int calcSprockets[] = {-1, -1, -1, -1};
+    int calcSprockets[] = {3, 2, 10, 7};
     //  stores given values of sprockets per stage
-    int sprockets[] = {3, 2, 10, 7};
+    //int sprockets[] = {3, 2, 10, 7};
     //  number of stages required
     int stageReq[] = {0, 1, 1, 3};
 
@@ -25,17 +23,8 @@ int main(){
         cout<< "test outer while\n";
         cout<< i << "iteration\n"; 
         */
-        if (stageReq[i] == 0){
-            calcSprockets[i] = sprockets[i];
-            /*
-            //test line
-            cout<< "" <<calcSprockets[i];
-            cout<< "\n";
-            */
-        } 
-        else{
+        if (stageReq[i] != 0){
             int j = stageReq[i];
-            calcSprockets[i] = sprockets[i];
             /*
             //test line
             cout<< "" <<calcSprockets[i];
