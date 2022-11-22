@@ -1,0 +1,17 @@
+
+
+
+
+
+// this not complete. el deleto
+
+CalculateSprockets(n):
+    store stages required in array stageReq[]
+    store sprockets per stage in array sprockets[]
+
+    if(stageReq[n] == 0)    //no previous stages required
+        return sprockets[n]
+    else
+
+
+
