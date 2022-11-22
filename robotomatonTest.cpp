@@ -8,7 +8,7 @@ using namespace std;
 
 int main(){
 
-    cout<< "test";
+    cout<< "test\n";
     
     //  used for calculating total sprockets
     int calcSprockets[] = {-1, -1, -1, -1};
@@ -20,21 +20,58 @@ int main(){
     //  number of stages
     int n = 4;
     int i = 0;
-    while (i <= n){
-        if (stageReq[i] == 0)
+    while (i < n){
+        /*
+        cout<< "test outer while\n";
+        cout<< i << "iteration\n"; 
+        */
+        if (stageReq[i] == 0){
             calcSprockets[i] = sprockets[i];
+            /*
+            //test line
+            cout<< "" <<calcSprockets[i];
+            cout<< "\n";
+            */
+        } 
         else{
             int j = stageReq[i];
             calcSprockets[i] = sprockets[i];
+            /*
+            //test line
+            cout<< "" <<calcSprockets[i];
+            cout<< "\n";
+            */
             while (j > 0){
+                /*
+                cout<< "test inner while\n";
+                //test line
+                cout<< "" <<calcSprockets[i];
+                cout<< "\n";
+                */
                 calcSprockets[i] = calcSprockets[i] + calcSprockets[i-j];
+                /*
+                //test line
+                cout<< "" <<calcSprockets[i];
+                cout<< "\n";
+                */
                 j--;
             }//end innerwhile
         }//end else
         i++;
     }//end while
-    cout<< "test";
+    //cout<< "test end\n";
     cout<< "" <<calcSprockets[n-1];
+    /*
+    cout<< "\n";
+    cout<< "" <<calcSprockets[0];
+    cout<< "\n";
+    cout<< "" <<calcSprockets[1];
+    cout<< "\n";
+    cout<< "" <<calcSprockets[2];
+    cout<< "\n";
+    cout<< "" <<calcSprockets[3];
+    cout<< "\n";
+    */
     return 0;
 
 
