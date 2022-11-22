@@ -140,12 +140,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Omnidroid.cpp" />
-    <ClCompile Include="Part.cpp" />
     <ClCompile Include="robot.cpp" />
+    <ClCompile Include="RobotIO.cpp" />
+    <ClCompile Include="RobotFileObj.cpp" />
+    <ClCompile Include="RobotList.cpp" />
+    <ClCompile Include="Robotomaton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Omnidroid.h" />
-    <ClInclude Include="Part.h" />
+    <ClInclude Include="RobotIO.h" />
+    <ClInclude Include="RobotFileObj.h" />
+    <ClInclude Include="RobotList.h" />
+    <ClInclude Include="Robotomaton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

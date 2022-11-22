@@ -18,18 +18,36 @@
     <ClCompile Include="robot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Part.cpp">
+    <ClCompile Include="Omnidroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Omnidroid.cpp">
+    <ClCompile Include="Robotomaton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RobotIO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RobotFileObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RobotList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Part.h">
+    <ClInclude Include="Omnidroid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Omnidroid.h">
+    <ClInclude Include="Robotomaton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotFileObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RobotList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

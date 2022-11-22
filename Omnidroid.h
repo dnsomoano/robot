@@ -19,10 +19,14 @@ class Omnidroid
 {
 	int totalDependencies;
 	int totalParts;
-public:
-	Omnidroid(vector<pair<string, string>> strToks, int p, int d);
+private:
+	int totalSprockets;
 	void buildPartsMap(vector<pair<string, string>> strToks, int parts, int deps);
 	int memoizedSprockets(vector<int> listOfPartsById, vector<int> sprockets, vector<int>& sumArr, int totalPts);
-	int totalSprocketWrapper(vector<int> listOfPartsById, vector<int> sprockets, int totalParts);
+	int totalSprocketHelper(vector<int> listOfPartsById, vector<int> sprockets, int totalParts);
+public:
+	Omnidroid(vector<pair<string, string>> strToks, int p, int d);
+	int getTotalSprockets() { return totalSprockets; };
+	void setTotalSprockets(int s) { totalSprockets = s; };
 };
 #endif // !OMNIDROID_H 

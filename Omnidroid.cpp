@@ -15,6 +15,7 @@ void Omnidroid::buildPartsMap(vector<pair<string, string>> rfStrToks, int parts,
 	vector<int> use;
 	unordered_map<int, vector<int>> req;
 	int totalBldSteps = deps + 3;
+	int sprocketsTotal = 0;
 	int ifSize = rfStrToks.size();
 	for (int j = 3; j < totalBldSteps || isalpha(rfStrToks[j].first[0]); j++)
 	{
@@ -36,32 +37,28 @@ void Omnidroid::buildPartsMap(vector<pair<string, string>> rfStrToks, int parts,
 		// * Add i and i + 1 and entries into req, plus add an entry each for j and j + 1 to use(interm array).
 		if (isIValsEq && isJValsEq)
 		{
+			int jUp = j - 1;
+			int jCol = j + 2;
+			int numOfConsec = 2;
+			while (stoi(rfStrToks[jUp].first) == iVal)
+			{
+				numOfConsec++;
+				jUp--;
+			}
+			while (stoi(rfStrToks[jCol].first) == iVal)
+			{
+				numOfConsec++;
+				jCol++;
+			}
 			if (!isIValIntermPart)
 			{
-				int jUp = j - 1;
-				int jCol = j + 2;
-				int numOfConsec = 2;
-				while (stoi(rfStrToks[jUp].first) == iVal)
-				{
-					numOfConsec++;
-					jUp--;
-				}
-				while (stoi(rfStrToks[jCol].first) == iVal)
-				{
-					numOfConsec++;
-					jCol++;
-				}
-				// TODO change to power of 2 instead of 4.
 				for (int b = 0; b < numOfConsec; b++)
-				{
 					req[jVal].push_back(iVal);
-				}
 				use.push_back(jVal);
 			}
 			else
 			{
-				// TODO change to power of 2 instead of 4.
-				for (int b = 0; b < 2; b++)
+				for (int b = 0; b < numOfConsec; b++)
 					req[jVal].push_back(iVal);
 			}
 			j = j + 1;
@@ -84,12 +81,13 @@ void Omnidroid::buildPartsMap(vector<pair<string, string>> rfStrToks, int parts,
 				use.push_back(jVal);
 		}
 	}
-	// * Generating sprockets lookup for parts.
+	// * Generating sprockets for parts id by value.
 	int l = 0;
 	for (int k = deps + 3; k < ifSize && l < totalParts; k++, l++)
 	{
 		sprockets.push_back(stoi(rfStrToks[k].first));
 	}
+	// * Flatten map to a 1-d array, so that each index is a total count of that part.
 	for (int i = 0; i < totalParts; i++)
 	{
 		listOfPartsById.push_back(0);
@@ -103,15 +101,15 @@ void Omnidroid::buildPartsMap(vector<pair<string, string>> rfStrToks, int parts,
         }
         cout << '\n';
     }
+	// * Append the last part, which will not appear as a basic part in the map.
 	listOfPartsById[totalParts - 1] = 1;
-	vector<int> totalSprockets;
-	//totalSprockets = totalSprocketWrapper(listOfPartsById, sprockets, totalParts);
-	//int sprTot = naiveRb(listOfPartsById, sprockets, totalParts - 1);
-	int sprTot = totalSprocketWrapper(listOfPartsById, sprockets, totalParts - 1);
+	// Recursively iterate through 1-d array with part counts, using memoized algorithm.
+	sprocketsTotal = totalSprocketHelper(listOfPartsById, sprockets, totalParts - 1);
+	setTotalSprockets(sprocketsTotal);
 	cout << "Added one robot" << endl;
 }
 
-int Omnidroid::totalSprocketWrapper(std::vector<int> listOfPartsById, vector<int> sprockets, int totalParts)
+int Omnidroid::totalSprocketHelper(std::vector<int> listOfPartsById, vector<int> sprockets, int totalParts)
 {
 	// * Initialize array with sentinel value
 	vector<int> sprocketsLookup;

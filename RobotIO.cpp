@@ -5,6 +5,59 @@ RobotIO::RobotIO(string filename)
 	set_filename(filename);
 }
 
+RobotList RobotIO::loadRobots()
+{
+	vector<pair<string, string>> rfStrToks;
+	int totalRobots = 0;
+	RobotList robots;
+    ifstream inputRobFile("small-omni-input.txt");
+	if (inputRobFile)
+	{
+		string line;
+		while (getline(inputRobFile, line))
+		{
+			if (line != "")
+			{
+				totalRobots = stoi(line);
+				getline(inputRobFile, line, '\n');
+					for (int i = 0; i < totalRobots; i++)
+					{
+						getline(inputRobFile, line, '\n');
+						RobotFileObj newRobot;
+						newRobot.setType(line);
+						getline(inputRobFile, line, ' ');
+						newRobot.setTotalParts(stoi(line));
+						getline(inputRobFile, line, '\n');
+						newRobot.setTotalDeps(stoi(line));
+						int depCount = 0;
+						while (depCount < newRobot.getTotalDeps())
+						{
+							pair<int, int> p;
+							int lineSize = 0;
+							getline(inputRobFile, line, '\n');
+							lineSize = line.length();
+							int spPost = line.find(" ");
+							p.first = stoi(line.substr(0, spPost));
+							p.second = stoi(line.substr(spPost, lineSize));
+							newRobot.addDepend(p);
+							depCount++;
+						}
+						int partCount = 0;
+						while (partCount < newRobot.getTotalParts())
+						{
+							getline(inputRobFile, line, '\n');
+							newRobot.addPartId(stoi(line));
+							partCount++;
+						}
+						robots += newRobot;
+					}
+			}
+		}
+		inputRobFile.close();
+	}
+	return robots;
+}
+
 //TaskList TaskIO::load_tasks()
 //{
 //	TaskList tasks;
