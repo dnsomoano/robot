@@ -10,7 +10,7 @@ RobotList RobotIO::loadRobots()
 	vector<pair<string, string>> rfStrToks;
 	int totalRobots = 0;
 	RobotList robots;
-    ifstream inputRobFile("small-omni-input.txt");
+    ifstream inputRobFile("custom-example.txt");
 	if (inputRobFile)
 	{
 		string line;
@@ -18,37 +18,68 @@ RobotList RobotIO::loadRobots()
 		{
 			if (line != "")
 			{
-				totalRobots = stoi(line);
+				totalRobots = stol(line);
 				getline(inputRobFile, line, '\n');
 					for (int i = 0; i < totalRobots; i++)
 					{
-						getline(inputRobFile, line, '\n');
+						if (line == "")
+						{
+							getline(inputRobFile, line, '\n');
+						}
 						RobotFileObj newRobot;
 						newRobot.setType(line);
-						getline(inputRobFile, line, ' ');
-						newRobot.setTotalParts(stoi(line));
-						getline(inputRobFile, line, '\n');
-						newRobot.setTotalDeps(stoi(line));
-						int depCount = 0;
-						while (depCount < newRobot.getTotalDeps())
+						if (newRobot.getType() == "omnidroid")
 						{
-							pair<int, int> p;
-							int lineSize = 0;
+							newRobot.isOmnidroid = true;
+						}
+						else
+						{
+							newRobot.isRobotomaton = true;
+						}
+						if (newRobot.isOmnidroid)
+						{
+							getline(inputRobFile, line, ' ');
+							newRobot.setTotalParts(stol(line));
 							getline(inputRobFile, line, '\n');
-							lineSize = line.length();
-							int spPost = line.find(" ");
-							p.first = stoi(line.substr(0, spPost));
-							p.second = stoi(line.substr(spPost, lineSize));
-							newRobot.addDepend(p);
-							depCount++;
+							newRobot.setTotalDeps(stol(line));
+						}
+						else {
+							getline(inputRobFile, line, '\n');
+							newRobot.setTotalParts(stol(line));
+						}
+						int depCount = 0;
+						if (newRobot.isOmnidroid)
+						{
+							while (depCount < newRobot.getTotalDeps())
+							{
+								pair<int, int> p;
+								int lineSize = 0;
+								getline(inputRobFile, line, '\n');
+								lineSize = line.length();
+								int spPost = line.find(" ");
+								p.first = stol(line.substr(0, spPost));
+								p.second = stol(line.substr(spPost, lineSize));
+								newRobot.addDepend(p);
+								depCount++;
+							}
 						}
 						int partCount = 0;
 						while (partCount < newRobot.getTotalParts())
 						{
 							getline(inputRobFile, line, '\n');
-							newRobot.addPartId(stoi(line));
+							if (newRobot.isOmnidroid)
+								newRobot.addPartId(stol(line));
+							else
+							{
+								int spPost = line.find(" ");
+								int lineSize = line.length();
+								newRobot.addPartId(stol(line.substr(0, spPost)));
+								newRobot.addStage(stol(line.substr(spPost, lineSize)));
+							}
 							partCount++;
+							//
 						}
+						getline(inputRobFile, line, '\n');
 						robots += newRobot;
 					}
 			}
@@ -58,44 +89,15 @@ RobotList RobotIO::loadRobots()
 	return robots;
 }
 
-//TaskList TaskIO::load_tasks()
-//{
-//	TaskList tasks;
-//	TaskIO taskIO("taskList.txt");
-//	string line = "", description = "", task_complete = "";
-//	bool is_task_complete = "";
-//	ifstream input_file(taskIO.get_filename());
-//	//
-//	if (input_file)
-//	{
-//		while (getline(input_file, line, '\n'))
-//		{
-//			stringstream s(line);
-//			getline(s, description, ',');
-//			s >> task_complete;
-//			is_task_complete = task_complete == "true" ? true : false;
-//			Task task(description, is_task_complete);
-//			tasks += task;
-//		}
-//	}
-//	else {
-//		cout << "File not found" << endl;
-//	}
-//	input_file.close();
-//	return tasks;
-//}
-//
-//void TaskIO::save_tasks(TaskList& tasks)
-//{
-//	TaskIO taskIO("taskList.txt");
-//	ofstream output_file(taskIO.get_filename());
-//	for (int i = 0; i < tasks.length; i++)
-//	{
-//		string task_complete = tasks[i].get_task_complete() == true ? "true" : "false";
-//		output_file << tasks[i].get_description() << "," << task_complete << endl;
-//	}
-//	output_file.close();
-//}
+void RobotIO::saveSprockets(vector<long long int> sprocketTotals, long int size)
+{
+	ofstream sprocketOutputFile("output.txt");
+	for (int i = 0; i < size; i++)
+	{
+		sprocketOutputFile << sprocketTotals[i] << endl;
+	}
+	sprocketOutputFile.close();
+}
 
 void RobotIO::set_filename(string fname_param)
 {

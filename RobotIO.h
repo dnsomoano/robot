@@ -16,8 +16,7 @@ private:
 public:
 	RobotIO(string filename = "");
 	static RobotList loadRobots();
-	//static TaskList load_tasks();
-	//static void save_tasks(TaskList& tasks);
+	void saveSprockets(vector<long long int> sprocketTotals, long int size);
 	void set_filename(string fname_param);
 	string get_filename();
 };

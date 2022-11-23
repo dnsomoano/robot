@@ -1,30 +1,31 @@
 #include "Robotomaton.h"
 
-Robotomaton::Robotomaton(vector<pair<string, string>> strToks, int sprockets[], int stages[])
+Robotomaton::Robotomaton(RobotFileObj rbf, vector<long int> sprockets, vector<long int> stages)
 {
-    BuildRobotomata(strToks, sprockets, stages);
+    BuildRobotomata(rbf, sprockets, stages);
 }
 
-void Robotomaton::BuildRobotomata(vector<pair<string, string>> strToks, int sprockets[], int stages[])
+void Robotomaton::BuildRobotomata(RobotFileObj rbf, vector<long int> sprockets, vector<long int> stages)
 {
-	int calcSprockets[] = {3, 11, 31, 29, 5};
-    int stageReq[] = {0, 0, 1, 2, 4};
+	//int calcSprockets[] = {3, 11, 31, 29, 5};
+ //   int stageReq[] = {0, 0, 1, 2, 4};
 
     //  number of stages
-    int n = 5;
+    int n = stages.size();
     int i = 0;
     while (i < n){
-        if (stageReq[i] != 0){
-            int j = stageReq[i];
+        if (stages[i] != 0){
+            int j = stages[i];
 
             while (j > 0){
 
-                calcSprockets[i] = calcSprockets[i] + calcSprockets[i-j];
+                sprockets[i] = sprockets[i] + sprockets[i-j];
                 j--;
             }//end innerwhile
         }//end else
         i++;
     }//end while
     //cout<< "test end\n";
-    cout<< "" <<calcSprockets[n-1];
+    this->setTotalSprockets(sprockets[n - 1]);
+    //cout<< "" << sprockets[n-1];
 }

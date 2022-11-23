@@ -6,7 +6,7 @@ void RobotList::operator+=(RobotFileObj& robotInp)
 	length++;
 }
 
-RobotFileObj& RobotList::operator[](int index)
+RobotFileObj& RobotList::operator[](long int index)
 {
 	return robotInpObjs[index];
 }

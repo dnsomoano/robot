@@ -12,9 +12,9 @@ class RobotList
 {
 	vector<RobotFileObj> robotInpObjs;
 public:
-	int length = 0;
+	long int length = 0;
 	void operator+= (RobotFileObj& robotInp);
-	RobotFileObj& operator[](int index);
+	RobotFileObj& operator[](long int index);
 };
 
 #endif // !ROBOTLIST_H!

@@ -21,9 +21,6 @@
     <ClCompile Include="Omnidroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Robotomaton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RobotIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,12 +30,12 @@
     <ClCompile Include="RobotList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Robotomaton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Omnidroid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Robotomaton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RobotIO.h">
@@ -48,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RobotList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Robotomaton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,5 @@
 #ifndef OMNIDROID_H
-#define ROBOTOMATON_H
+#define OMNIDROID_H
 #pragma once
 #include <iostream>
 #include <string>
@@ -12,21 +12,22 @@
 #include <vector>
 #include <limits>
 #include <ctype.h>
+#include "RobotFileObj.h"
 
 using namespace std;
 
 class Omnidroid
 {
-	int totalDependencies;
-	int totalParts;
+	long int totalDependencies;
+	long int totalParts;
 private:
-	int totalSprockets;
-	void buildPartsMap(vector<pair<string, string>> strToks, int parts, int deps);
-	int memoizedSprockets(vector<int> listOfPartsById, vector<int> sprockets, vector<int>& sumArr, int totalPts);
-	int totalSprocketHelper(vector<int> listOfPartsById, vector<int> sprockets, int totalParts);
+	long long int totalSprockets;
+	void buildPartsMap(RobotFileObj rbf, long int parts, long int deps);
+	long long int memoizedSprockets(vector<long int> listOfPartsById, vector<long int> sprockets, vector<long long int>& sumArr, long int totalPts);
+	long long int totalSprocketHelper(vector<long int> listOfPartsById, vector<long int> sprockets, long int totalParts);
 public:
-	Omnidroid(vector<pair<string, string>> strToks, int p, int d);
-	int getTotalSprockets() { return totalSprockets; };
-	void setTotalSprockets(int s) { totalSprockets = s; };
+	Omnidroid(RobotFileObj rbf, long int p, long int d);
+	long long int getTotalSprockets() { return totalSprockets; };
+	void setTotalSprockets(long long int s) { totalSprockets = s; };
 };
 #endif // !OMNIDROID_H 
