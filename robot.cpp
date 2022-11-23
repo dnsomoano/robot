@@ -12,25 +12,18 @@
 #include <vector>
 #include <limits>
 #include <ctype.h>
-#include "Part.h"
+#include "RobotIO.h"
+#include "Omnidroid.h"
+#include "Robotomaton.h"
 
 using namespace std;
 
-int rec_omnidroid(vector<int>& sprockets, unordered_map<int, vector<int> >& prev, unordered_map<int, int>& step_map, int current);
-// int rec_robotomaton();
-
 int main()
 {
-	bool isOmni = false;
-	vector<int> sprockets;
-	vector<int> use;
-	unordered_map<int, vector<int>> req;
 	vector<pair<string, string>> rfStrToks;
 	int numOfRobots = 0, totalParts = 0, totalLayers = 0;
-	Part* omnidroid = new Part();
-	Part* robotamton = new Part();
 	// * Read input file.
-    ifstream inputRobFile("example-input.txt");
+    ifstream inputRobFile("small-omni-input.txt");
 	if (inputRobFile)
 	{
 		string line;
@@ -47,7 +40,6 @@ int main()
 				}
 				rfStrToks.push_back(p);
 			}
-			//cout << line << endl;
 		}
 		//while (getline(inputRobFile, line))
 		//getline(inputRobFile, line, '\n');
@@ -78,124 +70,8 @@ int main()
 		//	cout << line << endl;
 		inputRobFile.close();
 	}
-	int ifSize = rfStrToks.size();
 	numOfRobots = stoi(rfStrToks[0].first);
 	totalParts = stoi(rfStrToks[2].first);
-	//cout << totalParts << endl;
 	totalLayers = stoi(rfStrToks[2].second);
-	//cout << totalLayers << endl;
-	int totalBldSteps = totalLayers + 3;
-	for (int j = 3; j < totalBldSteps || isalpha(rfStrToks[j].first[0]); j++)
-	{
-		int iVal = stoi(rfStrToks[j].first);
-		int iPlusOneVal = stoi(rfStrToks[j+1].first);
-
-		int jVal = stoi(rfStrToks[j].second);
-		int jPlusOneVal = 0;
-		if ((j + 1) < totalBldSteps)
-		{
-			jPlusOneVal = stoi(rfStrToks[j + 1].second);
-		}
-
-		bool isIValsEq = iVal == iPlusOneVal;
-		bool isJValsEq = jVal == jPlusOneVal;
-		bool isIValIntermPart = find(use.begin(), use.end(), iVal) != use.end();
-		bool isJValIntermPart = find(use.begin(), use.end(), jVal) != use.end();
-		// * If i int is eq to i + 1 int and j is eq to j + 1 int.
-		// * Add i and i + 1 and entries into req, plus add an entry each for j and j + 1 to use(interm array).
-		if (isIValsEq && isJValsEq)
-		{
-			if (!isIValIntermPart)
-			{
-				// TODO change to power of 2 instead of 4.
-				for (int b = 0; b < 4; b++)
-				{
-					req[jVal].push_back(iVal);
-				}
-				use.push_back(jVal);
-			}
-			else
-			{
-				// TODO change to power of 2 instead of 4.
-				for (int b = 0; b < 2; b++)
-					req[jVal].push_back(iVal);
-			}
-			j = j + 1;
-		}
-		// * If i int is NOT eq to i + 1 int and j is eq to j + 1 int.
-		// * Add i and i + 1 and entries into req, and add ONLY one entry for j and j + 1 to use(interm array).
-		else if (!isIValsEq && isJValsEq)
-		{
-			req[jVal].push_back(iVal);
-			req[jVal].push_back(iPlusOneVal);
-			use.push_back(jVal);
-			j = j + 1;
-		}
-		// * If i int is NOT eq to i + 1 int and j is NOT eq to j + 1 int.
-		// * Add i and i + 1 as SEPARATE entries into req, plus add an entry each for j, corresp with i, and j + 1, corresp with i + 1, to use(interm array).
-		else if (!isIValsEq && !isJValsEq)
-		{
-			req[jVal].push_back(iVal);
-			if (!isJValIntermPart)
-				use.push_back(jVal);
-		}
-	}
-	// * Generating sprockets lookup for parts.
-	int l = 0;
-	for (int k = totalLayers + 3; k < ifSize && l < totalParts; k++, l++)
-	{
-		sprockets.push_back(stoi(rfStrToks[k].first));
-	}
-	cout << "Added one robot" << endl;
-	unordered_map<int, int> map_step;
-
-
-	// TODO must iterate over map using memoized algorithm to generate total sprockets for each robot.
-	int sprock_total = rec_omnidroid(sprockets, req, map_step, sprockets.size() - 1);
-	cout << "Sprocket Total: " << sprock_total << endl;
-
-	//Map printing in reverse???
-	// 7: 112236
-	// 6: 45
-	// 2: 0000
-	// 1: 0000
-	/* unordered_map<int, vector<int>>::iterator itr;
-	for(itr = req.begin(); itr != req.end(); itr++){
-		cout << itr->first << ": ";
-		for(auto c : itr->second){
-			cout << c;
-		}
-		cout << '\n';
-	} */
-
-	return 0; 
-}//end main
-
-//Tried Implementing Recursive Omni, incorrect output
-int rec_omnidroid(vector<int>& sprockets, unordered_map<int, vector<int> >& prev, unordered_map<int, int>& step_map, int current){
-
-	unordered_map<int, vector<int> >::iterator prevStepExists = prev.find(current);
-
-	if(current == 0){
-		return 0;
-	}
-
-    if(prevStepExists == prev.end()){
-        step_map[current] = sprockets[current];
-        return step_map[current];
-    }
-
-    for (int prevStep: prevStepExists->second){
-
-        unordered_map<int, int>::iterator stepExists = step_map.find(prevStep);
-        if (stepExists != step_map.end()){
-            step_map[current] += step_map[prevStep];
-        }
-        else{
-            step_map[current] += rec_omnidroid(sprockets, prev, step_map, prevStep);
-        }
-    }
-
-    return step_map[current] += sprockets[current];
-
-}//end rec_omnidroid
+	Omnidroid newOmni = Omnidroid(rfStrToks, totalParts, totalLayers);
+}

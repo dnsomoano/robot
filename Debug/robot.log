@@ -1,3 +1,7 @@
-﻿  robot.cpp
+﻿  Omnidroid.cpp
   The contents of <string_view> are available only with C++17 or later.
+  Part.cpp
+  robot.cpp
+  The contents of <string_view> are available only with C++17 or later.
+  Generating Code...
   robot.vcxproj -> C:\Users\Halberd\source\repos\robot\Debug\robot.exe
