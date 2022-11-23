@@ -3,15 +3,21 @@
 
 
 
-// this not complete. el deleto
+//
 
-CalculateSprockets(n):
-    store stages required in array stageReq[]
-    store sprockets per stage in array sprockets[]
-
-    if(stageReq[n] == 0)    //no previous stages required
-        return sprockets[n]
+stageReq[0,1,1,3]
+sprockets[3,2,10,7]
+n = 4
+calc(n):
+    i = n-1;
+    if stageReq[i] == 0:
+        total = total + sprockets[i];
+        return total;
     else
-
-
-
+        j = stageReq[i];
+        for j;j>0;j--:
+            total = total + Calc(i);
+        end
+    end
+    return total;
+end

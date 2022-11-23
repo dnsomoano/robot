@@ -67,6 +67,8 @@ int main(){
 }//end main
 */
 
+/*
+//iterative algorithm
 int main(){
 
     cout<< "test\n";
@@ -96,3 +98,62 @@ int main(){
 
 
 }//end main
+*/
+
+
+//attempt of recrusive. no work
+int calc(int n, int stageReq[], int sprockets[]){    
+    //int stageReq[] = {0,1,1,3};
+    //int sprockets[] ={3,2,10,7};
+    int i = n-1;
+    int total;
+
+    if (stageReq[i] == 0){
+        total = total + sprockets[i];
+        return total;
+    }
+    else{
+        int j = stageReq[i];
+        for (;j>0 ; j--){
+            total = total + calc(i, stageReq, sprockets);
+        }
+    }
+    
+    return total;
+}
+
+int main(){
+    int n = 4;
+    int stageReq[] = {0,1,1,3};
+    int sprockets[] ={3,2,10,7};
+
+    int temp = calc(n, stageReq, sprockets);
+    std::cout<< "final value = "<<temp << "\n";
+}
+
+/*
+//alternative interative algorithm...... didnt realize i was making this instead of recursive
+int calc(int stageReq[], int sprockets[], int n) {
+    int* totals = (int*)malloc(sizeof(int) * n);
+    if (!totals) {
+        cout << "error: could not allocate memory for totals" << endl;
+        return -1;
+    }
+    
+    int total = 0;
+    
+    totals[0] = sprockets[0];
+    totals[n-1] = sprockets[n-1];
+    
+    for (int i = 0; i < n - 1; i++) {
+        totals[i] = sprockets[i] + totals[i - 1];
+    }
+    
+    for (int i = 0; i < n; i++) {
+        total += totals[i];
+    }
+    
+    if (totals) free(totals);
+    return total;
+}
+*/
